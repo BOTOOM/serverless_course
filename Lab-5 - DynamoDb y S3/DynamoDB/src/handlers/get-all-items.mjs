@@ -36,24 +36,25 @@ export const getAllItemsHandler = async (event) => {
     console.log("Error", err);
   }
   for (let i = 0; i < items.length; i++) {
-    var bookparams = {
-      TableName: bookTableName,
-      Key: { user_id: items[i].id },
-    };
+    const bookparams = {
+        TableName: bookTableName, // Reemplaza con el nombre de tu tabla
+        FilterExpression: "#user_id = :user_id_value",
+        ExpressionAttributeNames: {
+          "#user_id": "user_id",
+        },
+        ExpressionAttributeValues: {
+          ":user_id_value": items[i].id, // Reemplaza con el valor que buscas
+        },
+      };
     try {
       const data = await ddbDocClient.send(new ScanCommand(bookparams));
       var Bookitems = data.Items;
+      items[i].books = Bookitems
     } catch (err) {
       console.log("Error", err);
     }
   }
   
-
-    return {
-      ...item,
-      books: Bookitems
-    };
-  });
 
   const response = {
     statusCode: 200,
