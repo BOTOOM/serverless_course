@@ -35,7 +35,7 @@ export const getAllItemsHandler = async (event) => {
   } catch (err) {
     console.log("Error", err);
   }
-  itams.map(async (item) => {
+  items.map(async (item) => {
     var bookparams = {
       TableName: bookTableName,
       Key: { user_id: item.id },
