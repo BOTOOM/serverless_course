@@ -140,9 +140,9 @@ Resources:
         ReadCapacityUnits: 2
         WriteCapacityUnits: 2
 
-Outputs:
-  WebEndpoint:
-    Description: API Gateway endpoint URL for Prod stage
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+# Outputs:
+#   WebEndpoint:
+#     Description: API Gateway endpoint URL for Prod stage
+#     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
 # # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 
