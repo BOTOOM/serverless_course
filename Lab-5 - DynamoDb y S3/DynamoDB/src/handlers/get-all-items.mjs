@@ -35,17 +35,19 @@ export const getAllItemsHandler = async (event) => {
   } catch (err) {
     console.log("Error", err);
   }
-  items.map(async (item) => {
+  for (let i = 0; i < items.length; i++) {
     var bookparams = {
       TableName: bookTableName,
-      Key: { user_id: item.id },
+      Key: { user_id: items[i].id },
     };
     try {
-        const data = await ddbDocClient.send(new ScanCommand(bookparams));
-        var Bookitems = data.Items;
+      const data = await ddbDocClient.send(new ScanCommand(bookparams));
+      var Bookitems = data.Items;
     } catch (err) {
       console.log("Error", err);
     }
+  }
+  
 
     return {
       ...item,
