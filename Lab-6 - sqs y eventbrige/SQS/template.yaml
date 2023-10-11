@@ -32,12 +32,12 @@ Resources:
         - x86_64
       MemorySize: 1024
       Timeout: 900
-      Events: null
-      Api:
-        Type: Api
-        Properties:
-          Path: /
-          Method: GET
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /
+            Method: GET
       Environment:
         Variables:
           MY_SQS_URL: !GetAtt MyQueue.QueueUrl
@@ -112,3 +112,8 @@ Resources:
         Target: es2020
         Sourcemap: false
         UseNpmCi: true
+
+Outputs:
+  WebEndpoint:
+    Description: API Gateway endpoint URL for Prod stage
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
