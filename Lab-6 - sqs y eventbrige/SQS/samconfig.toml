@@ -1,59 +1,31 @@
+# More information about the configuration file can be found here:
+# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-config.html
 version = 0.1
+
 [default]
-[default.deploy]
+[default.global.parameters]
+stack_name = "DynamoDB"
+
+[default.build.parameters]
+cached = true
+parallel = true
+
+[default.validate.parameters]
+lint = true
+
 [default.deploy.parameters]
-stack_name = "CreatorSpaceLambdaFunctions"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1ddosxmbgqp57"
-s3_prefix = "CreatorSpaceLambdaFunctions"
-region = "us-east-1"
+capabilities = "CAPABILITY_IAM"
 confirm_changeset = true
-capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM"
-disable_rollback = true
-image_repositories = []
+resolve_s3 = true
 
-[dev]
-[dev.deploy]
-[dev.deploy.parameters]
-stack_name = "DEV-CreatorSpaceLambdaFunctions"
-s3_prefix = "DEV-CreatorSpaceLambdaFunctions"
-region = "us-east-1"
-confirm_changeset = true
-capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM"
-disable_rollback = true
-image_repositories = []
+[default.package.parameters]
+resolve_s3 = true
 
-[qa]
-[qa.deploy]
-[qa.deploy.parameters]
-stack_name = "QA-CreatorSpaceLambdaFunctions"
-s3_prefix = "QA-CreatorSpaceLambdaFunctions"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1ddosxmbgqp57"
-region = "us-east-1"
-confirm_changeset = true
-capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM"
-disable_rollback = true
-image_repositories = []
+[default.sync.parameters]
+watch = true
 
-[stage]
-[stage.deploy]
-[stage.deploy.parameters]
-stack_name = "STAGE-CreatorSpaceLambdaFunctions"
-s3_prefix = "STAGE-CreatorSpaceLambdaFunctions"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1ddosxmbgqp57"
-region = "us-east-1"
-confirm_changeset = true
-capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM"
-disable_rollback = true
-image_repositories = []
+[default.local_start_api.parameters]
+warm_containers = "EAGER"
 
-[prod]
-[prod.deploy]
-[prod.deploy.parameters]
-stack_name = "PROD-CreatorSpaceLambdaFunctions"
-s3_prefix = "PROD-CreatorSpaceLambdaFunctions"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1ddosxmbgqp57"
-region = "us-east-1"
-confirm_changeset = true
-capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM"
-disable_rollback = true
-image_repositories = []
+[default.local_start_lambda.parameters]
+warm_containers = "EAGER"
