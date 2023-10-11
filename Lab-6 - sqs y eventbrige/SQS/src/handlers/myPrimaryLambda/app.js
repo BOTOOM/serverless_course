@@ -1,6 +1,7 @@
-import AWS from "aws-sdk";
+import { SQSClient } from "@aws-sdk/client-sqs";
 // import { v4 as uuidv4 } from "uuid";
-const sqs = new AWS.SQS();
+const client = new SQSClient();
+
 
 export const lambda_handler = async (event, context) => {
   // const groupId = event["groupId"]+ `${Date.now()}`;
@@ -18,7 +19,7 @@ export const lambda_handler = async (event, context) => {
     if (messages.length > 0) {
       const queueUrl = process.env.MY_SQS_URL;
 
-      const sqs_status = await sqs.sendMessageBatch({
+      const sqs_status = await client.sendMessageBatch({
         QueueUrl: queueUrl,
         Entries: messages,
       });
