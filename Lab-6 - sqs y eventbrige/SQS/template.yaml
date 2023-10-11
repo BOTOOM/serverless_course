@@ -25,7 +25,7 @@ Resources:
   myPrimaryLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: /src/handlers/myPrimaryLambda/app.lambda_handler
+      Handler: src/handlers/myPrimaryLambda/app.lambda_handler
       Runtime: nodejs18.x
       Architectures:
         - x86_64
@@ -44,10 +44,10 @@ Resources:
       Policies:
         - AWSLambdaBasicExecutionRole
         - AmazonSQSFullAccess
-        
+
     Type: AWS::Serverless::Function
     Properties:
-      Handler: /src/handlers/mySecondLambda/app.lambda_handler
+      Handler: src/handlers/mySecondLambda/app.lambda_handler
       Runtime: nodejs18.x
       Architectures:
         - x86_64
@@ -71,7 +71,7 @@ Resources:
   myDeadLetterLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: /src/handlers/myDeadLetterLambda/app.lambda_handler
+      Handler: src/handlers/myDeadLetterLambda/app.lambda_handler
       Runtime: nodejs18.x
       Architectures:
         - x86_64
