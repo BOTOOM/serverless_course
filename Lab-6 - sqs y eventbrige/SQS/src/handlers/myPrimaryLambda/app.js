@@ -5,7 +5,7 @@ const sqs = new AWS.SQS();
 export const lambda_handler = async (event, context) => {
   // const groupId = event["groupId"]+ `${Date.now()}`;
   const messages = [];
-  for (i = 0; i <= 10; i++) {
+  for (let i = 0; i <= 10; i++) {
     messages.push({
       MessageBody: JSON.stringify({
         "id": `mi-id-${i}`,
