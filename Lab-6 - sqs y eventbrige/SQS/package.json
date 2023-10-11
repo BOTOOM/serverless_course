@@ -2,7 +2,6 @@
   "name": "delete-test-01",
   "description": "delete-test-01-description",
   "version": "0.0.1",
-  "type": "module",
   "private": true,
   "dependencies": {
     "aws-sdk": "^2.1280.0"
