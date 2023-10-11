@@ -22,6 +22,7 @@ Resources:
       QueueName: MyDeadLetterSQS
       SqsManagedSseEnabled: true
       VisibilityTimeout: 100
+      
   myPrimaryLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -44,7 +45,7 @@ Resources:
       Policies:
         - AWSLambdaBasicExecutionRole
         - AmazonSQSFullAccess
-
+  mySecondLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: src/handlers/mySecondLambda/app.lambda_handler
