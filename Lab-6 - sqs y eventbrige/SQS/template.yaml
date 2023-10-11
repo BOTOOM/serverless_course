@@ -73,6 +73,39 @@ Resources:
       Description: A Lambda function that will process the sqs message.
       Policies:
         - AWSLambdaBasicExecutionRole
+        # - SQSPollerPolicy:
+              # QueueName: !GetAtt MyQueue.QueueName
+    Metadata:
+      BuildProperties:
+        Minify: true
+        Target: es2020
+        Sourcemap: false
+        UseNpmCi: true
+
+  myDeadLetterLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src/handlers/myDeadLetterLambda/
+      Handler: app.lambda_handler
+      Runtime: nodejs18.x
+      Architectures:
+        - x86_64
+      MemorySize: 1024
+      Timeout: 100
+      Events:
+        MySQSEvent:
+          Type: SQS
+          Properties:
+            Enabled: true
+            Queue: !GetAtt MyDeadLetterQueue.Arn
+            FunctionResponseTypes:
+              - ReportBatchItemFailures
+            BatchSize: 10
+      Description: A Lambda function that will process the dead letter sqs message.
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        # - SQSPollerPolicy:
+              # QueueName: !GetAtt MyDeadLetterQueue.QueueName
     Metadata:
       BuildProperties:
         Minify: true
