@@ -1,0 +1,59 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "CreatorSpaceLambdaFunctions"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1ddosxmbgqp57"
+s3_prefix = "CreatorSpaceLambdaFunctions"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM"
+disable_rollback = true
+image_repositories = []
+
+[dev]
+[dev.deploy]
+[dev.deploy.parameters]
+stack_name = "DEV-CreatorSpaceLambdaFunctions"
+s3_prefix = "DEV-CreatorSpaceLambdaFunctions"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM"
+disable_rollback = true
+image_repositories = []
+
+[qa]
+[qa.deploy]
+[qa.deploy.parameters]
+stack_name = "QA-CreatorSpaceLambdaFunctions"
+s3_prefix = "QA-CreatorSpaceLambdaFunctions"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1ddosxmbgqp57"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM"
+disable_rollback = true
+image_repositories = []
+
+[stage]
+[stage.deploy]
+[stage.deploy.parameters]
+stack_name = "STAGE-CreatorSpaceLambdaFunctions"
+s3_prefix = "STAGE-CreatorSpaceLambdaFunctions"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1ddosxmbgqp57"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM"
+disable_rollback = true
+image_repositories = []
+
+[prod]
+[prod.deploy]
+[prod.deploy.parameters]
+stack_name = "PROD-CreatorSpaceLambdaFunctions"
+s3_prefix = "PROD-CreatorSpaceLambdaFunctions"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1ddosxmbgqp57"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM"
+disable_rollback = true
+image_repositories = []

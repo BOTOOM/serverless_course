@@ -1,0 +1,81 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: SQS
+Transform: AWS::Serverless-2016-10-31
+Globals:
+  Function:
+    Tracing: Active
+  Api:
+    TracingEnabled: true
+Resources:
+  MyQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: MySQS
+      SqsManagedSseEnabled: true
+      VisibilityTimeout: 100
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt MyDeadLetterQueue.Arn
+        maxReceiveCount: 5
+  MyDeadLetterQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: MyDeadLetterSQS
+      SqsManagedSseEnabled: true
+      VisibilityTimeout: 100
+  myPrimaryLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src/handlers/myPrimaryLambda/
+      Handler: app.lambda_handler
+      Runtime: nodejs18.x
+      Architectures:
+        - x86_64
+      MemorySize: 1024
+      Timeout: 900
+      Events: null
+      Api:
+        Type: Api
+        Properties:
+          Path: /
+          Method: GET
+      Environment:
+        Variables:
+          MY_SQS_URL: !GetAtt MyQueue.QueueUrl
+      Description: A Lambda function that will send message to sqs
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonSQSFullAccess
+    Metadata:
+      BuildProperties:
+        Minify: true
+        Target: es2020
+        Sourcemap: false
+        UseNpmCi: true
+  mySecondLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src/handlers/mySecondLambda/
+      Handler: app.lambda_handler
+      Runtime: nodejs18.x
+      Architectures:
+        - x86_64
+      MemorySize: 1024
+      Timeout: 100
+      Events:
+        MySQSEvent:
+          Type: SQS
+          Properties:
+            Enabled: true
+            Queue: !GetAtt MyQueue.Arn
+            FunctionResponseTypes:
+              - ReportBatchItemFailures
+            BatchSize: 10
+      Description: A Lambda function that will process the sqs message.
+      Policies:
+        - AWSLambdaBasicExecutionRole
+    Metadata:
+      BuildProperties:
+        Minify: true
+        Target: es2020
+        Sourcemap: false
+        UseNpmCi: true
