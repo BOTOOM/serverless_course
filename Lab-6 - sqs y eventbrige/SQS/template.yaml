@@ -60,9 +60,11 @@ Resources:
           Properties:
             Enabled: true
             Queue: !GetAtt MyQueue.Arn
-            FunctionResponseTypes:
-              - ReportBatchItemFailures
-            BatchSize: 10
+            # FunctionResponseTypes:
+            #   - ReportBatchItemFailures
+            BatchSize: 1
+            MaxReceiveCount: 2
+            # BatchSize: 10
       Description: A Lambda function that will process the sqs message.
       Policies:
         - AWSLambdaBasicExecutionRole
