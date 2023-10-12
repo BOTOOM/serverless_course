@@ -15,7 +15,7 @@ Resources:
       VisibilityTimeout: 100
       RedrivePolicy:
         deadLetterTargetArn: !GetAtt MyDeadLetterQueue.Arn
-        maxReceiveCount: 5
+        maxReceiveCount: 2
   MyDeadLetterQueue:
     Type: AWS::SQS::Queue
     Properties:
@@ -63,7 +63,7 @@ Resources:
             # FunctionResponseTypes:
             #   - ReportBatchItemFailures
             BatchSize: 1
-            MaxReceiveCount: 2
+            # MaxReceiveCount: 2
             # BatchSize: 10
       Description: A Lambda function that will process the sqs message.
       Policies:
