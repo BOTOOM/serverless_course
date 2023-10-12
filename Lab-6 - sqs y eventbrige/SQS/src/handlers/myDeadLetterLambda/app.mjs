@@ -1,7 +1,6 @@
 export const lambda_handler = async (event, context) => {
   // Procesamos el mensaje
-  const message = JSON.parse(event.body);
-  console.log("Mensaje recibido:", message);
+  console.log("Mensaje recibido:", event);
 
   // Devolvemos una respuesta
   return {
