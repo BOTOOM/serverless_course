@@ -5,6 +5,7 @@
   "account":"123456789012",
   "time":"2015-11-11T21:29:54Z",
   "region":"us-east-1",
+  "version":"0",
   "resources":[
     "arn:aws:ec2:us-east-1:123456789012:instance/i-abcd1111"
   ],
