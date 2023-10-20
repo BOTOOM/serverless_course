@@ -187,7 +187,7 @@ Outputs:
     Value: !Ref BooksTable
   GetAllUsersArn:
     Description: API Gateway endpoint URL for Prod stage
-    Value: !GetAtt handleThumbnail.Arn
+    Value: !GetAtt getAllItemsFunction.Arn
 # # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
