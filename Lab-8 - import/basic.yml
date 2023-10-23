@@ -1,0 +1,445 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: cognito and s3
+Parameters:
+# Client info
+  EnvironmentName:
+    Type: String
+    Default: qa
+    Description: "Short environment slug, ie 'dev', or 'markdev'. Lowercase letters, numbers and dashes only"
+    AllowedPattern: "^[0-9a-zA-Z-/]*$"
+  CustomerName:
+    Type: String
+    Default: serverless
+    Description: "Name of the customer"
+    AllowedPattern: ".+"
+
+Metadata: 
+  AWS::CloudFormation::Interface: 
+    ParameterGroups: 
+      - 
+        Label: 
+          default: "Client Variables"
+        Parameters: 
+          - EnvironmentName
+          - CustomerName
+
+Resources:
+
+## Cognito
+  CognitoUserPool:
+        Type: "AWS::Cognito::UserPool"
+        Properties:
+            UserPoolName: "serverless"
+            Policies: 
+                PasswordPolicy: 
+                    MinimumLength: 8
+                    RequireUppercase: true
+                    RequireLowercase: true
+                    RequireNumbers: true
+                    RequireSymbols: true
+                    TemporaryPasswordValidityDays: 7
+            Schema: 
+              - 
+                Name: "sub"
+                AttributeDataType: "String"
+                DeveloperOnlyAttribute: false
+                Mutable: false
+                Required: true
+                StringAttributeConstraints: 
+                    MinLength: "1"
+                    MaxLength: "2048"
+              - 
+                Name: "name"
+                AttributeDataType: "String"
+                DeveloperOnlyAttribute: false
+                Mutable: true
+                Required: true
+                StringAttributeConstraints: 
+                    MinLength: "0"
+                    MaxLength: "2048"
+              - 
+                Name: "given_name"
+                AttributeDataType: "String"
+                DeveloperOnlyAttribute: false
+                Mutable: true
+                Required: false
+                StringAttributeConstraints: 
+                    MinLength: "0"
+                    MaxLength: "2048"
+              - 
+                Name: "family_name"
+                AttributeDataType: "String"
+                DeveloperOnlyAttribute: false
+                Mutable: true
+                Required: false
+                StringAttributeConstraints: 
+                    MinLength: "0"
+                    MaxLength: "2048"
+              - 
+                Name: "middle_name"
+                AttributeDataType: "String"
+                DeveloperOnlyAttribute: false
+                Mutable: true
+                Required: false
+                StringAttributeConstraints: 
+                    MinLength: "0"
+                    MaxLength: "2048"
+              - 
+                Name: "nickname"
+                AttributeDataType: "String"
+                DeveloperOnlyAttribute: false
+                Mutable: true
+                Required: false
+                StringAttributeConstraints: 
+                    MinLength: "0"
+                    MaxLength: "2048"
+              - 
+                Name: "preferred_username"
+                AttributeDataType: "String"
+                DeveloperOnlyAttribute: false
+                Mutable: true
+                Required: false
+                StringAttributeConstraints: 
+                    MinLength: "0"
+                    MaxLength: "2048"
+              - 
+                Name: "profile"
+                AttributeDataType: "String"
+                DeveloperOnlyAttribute: false
+                Mutable: true
+                Required: false
+                StringAttributeConstraints: 
+                    MinLength: "0"
+                    MaxLength: "2048"
+              - 
+                Name: "picture"
+                AttributeDataType: "String"
+                DeveloperOnlyAttribute: false
+                Mutable: true
+                Required: false
+                StringAttributeConstraints: 
+                    MinLength: "0"
+                    MaxLength: "2048"
+              - 
+                Name: "website"
+                AttributeDataType: "String"
+                DeveloperOnlyAttribute: false
+                Mutable: true
+                Required: false
+                StringAttributeConstraints: 
+                    MinLength: "0"
+                    MaxLength: "2048"
+              - 
+                Name: "email"
+                AttributeDataType: "String"
+                DeveloperOnlyAttribute: false
+                Mutable: true
+                Required: true
+                StringAttributeConstraints: 
+                    MinLength: "0"
+                    MaxLength: "2048"
+              - 
+                Name: "email_verified"
+                AttributeDataType: "Boolean"
+                DeveloperOnlyAttribute: false
+                Mutable: true
+                Required: false
+              - 
+                Name: "gender"
+                AttributeDataType: "String"
+                DeveloperOnlyAttribute: false
+                Mutable: true
+                Required: false
+                StringAttributeConstraints: 
+                    MinLength: "0"
+                    MaxLength: "2048"
+              - 
+                Name: "birthdate"
+                AttributeDataType: "String"
+                DeveloperOnlyAttribute: false
+                Mutable: true
+                Required: false
+                StringAttributeConstraints: 
+                    MinLength: "10"
+                    MaxLength: "10"
+              - 
+                Name: "zoneinfo"
+                AttributeDataType: "String"
+                DeveloperOnlyAttribute: false
+                Mutable: true
+                Required: false
+                StringAttributeConstraints: 
+                    MinLength: "0"
+                    MaxLength: "2048"
+              - 
+                Name: "locale"
+                AttributeDataType: "String"
+                DeveloperOnlyAttribute: false
+                Mutable: true
+                Required: false
+                StringAttributeConstraints: 
+                    MinLength: "0"
+                    MaxLength: "2048"
+              - 
+                Name: "phone_number"
+                AttributeDataType: "String"
+                DeveloperOnlyAttribute: false
+                Mutable: true
+                Required: false
+                StringAttributeConstraints: 
+                    MinLength: "0"
+                    MaxLength: "2048"
+              - 
+                Name: "address"
+                AttributeDataType: "String"
+                DeveloperOnlyAttribute: false
+                Mutable: true
+                Required: false
+                StringAttributeConstraints: 
+                    MinLength: "0"
+                    MaxLength: "2048"
+              - 
+                Name: "updated_at"
+                AttributeDataType: "Number"
+                DeveloperOnlyAttribute: false
+                Mutable: true
+                Required: false
+                NumberAttributeConstraints: 
+                    MinValue: "0"
+            AutoVerifiedAttributes: 
+              - "email"
+            AliasAttributes: 
+              - "preferred_username"
+            SmsVerificationMessage: "Your verification code is {####}."
+            EmailVerificationMessage: "Your verification code is {####}."
+            EmailVerificationSubject: "Your verification code"
+            MfaConfiguration: "OFF"
+            AdminCreateUserConfig: 
+                AllowAdminCreateUserOnly: false
+            UserPoolTags: {}
+            AccountRecoverySetting: 
+                RecoveryMechanisms: 
+                  - 
+                    Priority: 1
+                    Name: "verified_email"
+            UsernameConfiguration: 
+                CaseSensitive: false
+            VerificationMessageTemplate: 
+                SmsMessage: "Your verification code is {####}."
+                EmailMessage: "Your verification code is {####}."
+                EmailSubject: "Your verification code"
+                EmailMessageByLink: "Please click the link below to verify your email address. {##Verify Email##}"
+                EmailSubjectByLink: "Your verification link"
+                DefaultEmailOption: "CONFIRM_WITH_CODE"
+  CognitoUserPoolClient:
+        Type: "AWS::Cognito::UserPoolClient"
+        Properties:
+            UserPoolId: !Ref CognitoUserPool
+            ClientName: "serverless"
+            RefreshTokenValidity: 30
+            ReadAttributes: 
+              - "address"
+              - "birthdate"
+              - "email"
+              - "email_verified"
+              - "family_name"
+              - "gender"
+              - "given_name"
+              - "locale"
+              - "middle_name"
+              - "name"
+              - "nickname"
+              - "phone_number"
+              - "phone_number_verified"
+              - "picture"
+              - "preferred_username"
+              - "profile"
+              - "updated_at"
+              - "website"
+              - "zoneinfo"
+            WriteAttributes: 
+              - "address"
+              - "birthdate"
+              - "email"
+              - "family_name"
+              - "gender"
+              - "given_name"
+              - "locale"
+              - "middle_name"
+              - "name"
+              - "nickname"
+              - "phone_number"
+              - "picture"
+              - "preferred_username"
+              - "profile"
+              - "updated_at"
+              - "website"
+              - "zoneinfo"
+            ExplicitAuthFlows: 
+              - "ALLOW_CUSTOM_AUTH"
+              - "ALLOW_REFRESH_TOKEN_AUTH"
+              - "ALLOW_USER_PASSWORD_AUTH"
+              - "ALLOW_USER_SRP_AUTH"
+            PreventUserExistenceErrors: "ENABLED"
+            AllowedOAuthFlowsUserPoolClient: false
+            IdTokenValidity: 1
+            AccessTokenValidity: 1
+            TokenValidityUnits: 
+                AccessToken: "days"
+                IdToken: "days"
+                RefreshToken: "days"
+
+  KMSKey:
+        Type: "AWS::KMS::Key"
+        Properties:
+            Enabled: true
+            Description: ""
+            KeyUsage: "ENCRYPT_DECRYPT"
+            KeyPolicy: |
+                {
+                  "Version" : "2012-10-17",
+                  "Id" : "key-consolepolicy-3",
+                  "Statement" : [ {
+                    "Sid" : "Enable IAM User Permissions",
+                    "Effect" : "Allow",
+                    "Principal" : {
+                      "AWS" : "arn:aws:iam::744438540753:root"
+                    },
+                    "Action" : "kms:*",
+                    "Resource" : "*"
+                  }, {
+                    "Sid" : "Allow access for Key Administrators",
+                    "Effect" : "Allow",
+                    "Principal" : {
+                      "AWS" : [ "*" ]
+                    },
+                    "Action" : [ "kms:Create*", "kms:Describe*", "kms:Enable*", "kms:List*", "kms:Put*", "kms:Update*", "kms:Revoke*", "kms:Disable*", "kms:Get*", "kms:Delete*", "kms:TagResource", "kms:UntagResource", "kms:ScheduleKeyDeletion", "kms:CancelKeyDeletion" ],
+                    "Resource" : "*"
+                  }, {
+                    "Sid" : "Allow use of the key",
+                    "Effect" : "Allow",
+                    "Principal" : {
+                      "AWS" : [ "*" ]
+                    },
+                    "Action" : [ "kms:Encrypt", "kms:Decrypt", "kms:ReEncrypt*", "kms:GenerateDataKey*", "kms:DescribeKey" ],
+                    "Resource" : "*"
+                  }, {
+                    "Sid" : "Allow attachment of persistent resources",
+                    "Effect" : "Allow",
+                    "Principal" : {
+                      "AWS" : [ "*" ]
+                    },
+                    "Action" : [ "kms:CreateGrant", "kms:ListGrants", "kms:RevokeGrant" ],
+                    "Resource" : "*",
+                    "Condition" : {
+                      "Bool" : {
+                        "kms:GrantIsForAWSResource" : "true"
+                      }
+                    }
+                  } ]
+                }
+            KeySpec: "SYMMETRIC_DEFAULT"
+            MultiRegion: false
+            Tags:
+            - Key: Owner
+              Value: !Sub ${CustomerName}-${EnvironmentName}
+
+  KMSAlias:
+        Type: "AWS::KMS::Alias"
+        Properties:
+            AliasName: "alias/CSAWSSymetricKey"
+            TargetKeyId: !GetAtt KMSKey.KeyId
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Join
+      - "-"
+      - - "mybucketserverless"
+        - !Sub "${CustomerName}"
+        - !Select
+          - 0
+          - !Split
+            - "-"
+            - !Select
+              - 2
+              - !Split
+                - "/"
+                - !Ref "AWS::StackId"
+      PublicAccessBlockConfiguration:
+          BlockPublicAcls: no
+          BlockPublicPolicy: no
+          IgnorePublicAcls: no
+          RestrictPublicBuckets: no
+      LoggingConfiguration:
+        DestinationBucketName: !Ref LoggingBucket
+        LogFilePrefix: testing-logs
+      Tags:
+      - Key: Owner
+        Value: !Sub ${CustomerName}-${EnvironmentName}
+  MyS3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3Bucket
+      PolicyDocument:
+        Statement:
+          -
+            Action:
+              - s3:*
+            Effect: Allow
+            Resource:
+              - !Sub arn:aws:s3:::${S3Bucket}
+              - !Sub arn:aws:s3:::${S3Bucket}/*
+            Principal:
+              AWS:
+                - '*'
+  LoggingBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      Tags:
+      - Key: Owner
+        Value: !Sub ${CustomerName}-${EnvironmentName}
+
+  S3BucketPolicy:
+    Type: 'AWS::S3::BucketPolicy'
+    Properties:
+      Bucket: !Ref LoggingBucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Action:
+              - 's3:PutObject'
+            Effect: Allow
+            Principal:
+              Service: logging.s3.amazonaws.com
+            Resource: !Join 
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref LoggingBucket
+                - /*
+            Condition:
+              ArnLike:
+                'aws:SourceArn': !GetAtt 
+                  - S3Bucket
+                  - Arn
+              StringEquals:
+                'aws:SourceAccount': !Sub '${AWS::AccountId}'
+  
+  
+Outputs:
+    KMSK:
+      Description: KMS
+      Value: !Ref KMSAlias
+      Export:
+        Name: "KMS"
+    S3: 
+      Description: S3 gallery 
+      Value: !Ref S3Bucket
+      Export:
+        Name: "S3-serverless"
+    Cognito:
+      Description: Cognito user pool
+      Value: !Ref CognitoUserPool
+      Export:
+        Name: "Cognito-User-pool"
+
+
