@@ -41,6 +41,8 @@ Resources:
           POWERTOOLS_SERVICE_NAME: PowertoolsHelloWorld
           POWERTOOLS_METRICS_NAMESPACE: Powertools
           LOG_LEVEL: INFO
+          COGNITO: !ImportValue Cognito-User-pool
+          S3: !ImportValue S3-serverless
       Tags:
         LambdaPowertools: python
 
